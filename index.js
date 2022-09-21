@@ -23,7 +23,6 @@ class Categorias { // CREAMOS UN OBJETO CON UN ID Y CATEGORIA PARA CADA UNA DE L
                 ${this.categoria}
                 </button>
             </h2>
-
             <div id="flush-collapse${this.id}" class="accordion-collapse collapse" aria-labelledby="flush-heading${this.id}" data-bs-parent="#accordionFlushExample">
             <div id="categoria${this.id}" class="accordion-body">
             </div>
@@ -73,6 +72,8 @@ const containerDivBtn = document.createElement('p')
 
 console.log(arrayLocal.length)
 
+const informacionArray = []
+
 botonAgregar.onclick = (e) => {
     e.preventDefault()
     let gasto = {
@@ -83,9 +84,11 @@ botonAgregar.onclick = (e) => {
     }
 
     const {id,categoria,descripcion,valor} = gasto
-
     
-    localStorage.setItem(`${categoria}`, JSON.stringify(gasto)) 
+    informacionArray.push(gasto)
+
+    localStorage.setItem('gastos', JSON.stringify(informacionArray))
+
 /*     agregarGastos()
  */
     if(valor >= 0){
@@ -122,8 +125,5 @@ function agregarGastos(gasto){
         containerDivBtn.innerText = "Gasto agregado"
         container2.append(containerDivBtn)
     }    
-
- 
-
 
  
