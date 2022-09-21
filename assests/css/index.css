@@ -1,0 +1,28 @@
+ul li {
+    list-style: none;
+}
+
+body{
+    background: #8360c3;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #2ebf91, #8360c3);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #2ebf91, #8360c3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+#descripcion {
+    resize: none;
+}
+
+.centrado{
+ text-align: center;
+    vertical-align: middle;
+} 
+/* aplicarlo con js con un for a cada arreglo que le quiero poner el centrado*/
+
+h2{
+    margin-top: 22px;
+}
+
+.cat_null{
+    color: #cccfce;
+}
