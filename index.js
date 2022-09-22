@@ -6,7 +6,7 @@ const valorInput = document.getElementById('valor')
 const botonAgregar = document.getElementById('agregar')
 const divCategorias = document.getElementsByClassName('divCategorias')
 const container2 = document.getElementById('btnAdd') 
-
+const gastosLocal = []
 
 
 class Categorias { // CREAMOS UN OBJETO CON UN ID Y CATEGORIA PARA CADA UNA DE LAS MISMAS
@@ -54,25 +54,18 @@ opcionesCategorias.forEach(opcionesCategorias => { // AGREGAMOS LAS OPCIONES DEL
     selectTag.append(option)
 })
 
-
-
-let arrayLocal = []
-
-
-for (let i = 0; i < arrayCategoria.length; i++) {
-    arrayLocal.push('')
-}
-
-arrayLocal.forEach(arrayLocal =>{
-    console.log(arrayLocal);
-})
-
-
 const containerDivBtn = document.createElement('p')
 
-console.log(arrayLocal.length)
+const informacionArray = [] 
+if(localStorage.length > 0){
+    const gasto = localStorage.getItem('gasto')
+    const new_conversion = JSON.parse(gasto)
+   for (let i = 0; i < localStorage.length; i++) {      
+        gastosLocal.push(new_conversion)
+    
+   }
+}
 
-const informacionArray = []
 
 botonAgregar.onclick = (e) => {
     e.preventDefault()
@@ -85,30 +78,30 @@ botonAgregar.onclick = (e) => {
 
     const {id,categoria,descripcion,valor} = gasto
     
-    informacionArray.push(gasto)
-
-    localStorage.setItem('gastos', JSON.stringify(informacionArray))
-
-/*     agregarGastos()
- */
+   
     if(valor >= 0){
-     agregarGastos(localStorage.getItem(`${categoria}`))   
+        informacionArray.push(gasto)
+        localStorage.setItem('gastos', JSON.stringify(informacionArray))
+/*      */   
     }else{
         containerDivBtn.innerText = "Ingreso algun dato invalido"
         container2.append(containerDivBtn)
     }
 }
 
+agregarGastos(localStorage.getItem(`gastos`))
 
-console.log(opcionesCategorias);
+
+
 
 function agregarGastos(gasto){
-
+        
         containerDivBtn.remove()
-
-        const new_gastos = JSON.parse(gasto)
-        console.log(new_gastos);
-        const {id,categoria,descripcion,valor} = new_gastos
+        /* console.log(gasto); */
+        const new_conversion = JSON.parse(gasto)
+        gastosLocal.push(new_conversion)
+        console.log(new_conversion);
+        const {id,categoria,descripcion,valor} = new_conversion
         const card = `
         <div class="addGastos btn-group d-flex justify-content-between" role="group" aria-label="Basic checkbox toggle button group">
         <input type="checkbox" class="btn-check" id="btnCheck${id}" autocomplete="off">
@@ -118,9 +111,8 @@ function agregarGastos(gasto){
         </label>
         </div>
         `
-        const container = document.getElementById(`categoria${id}`)
-        container.innerHTML += card
-
+        const container2 = document.getElementById(`categoria${id}`)
+        container2.innerHTML += card
 
         containerDivBtn.innerText = "Gasto agregado"
         container2.append(containerDivBtn)
