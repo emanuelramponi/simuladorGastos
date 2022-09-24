@@ -38,27 +38,28 @@
                 <form id="form_gastos">
                     <div class="divCategorias mb-3"> <!-- CATEGORIAS -->
                         <label for="" class="form-label" id="category"> Categorias</label>
-                        <select id="lista" class="form-select">
+                        <select type="text" id="lista" class="form-select">
                           
                         </select>
                     </div>
 
                     <div class="mb-3"> <!-- DESCRIPCION -->
                         <label for="exampleFormControlTextarea1" class="form-label">Descripcion</label>
-                        <textarea class="form-control" id="descripcion" rows="3"
-                            placeholder="Ingrese la descripcion del producto"></textarea>
+                        <input type="text" class="form-control" id="descripcion" rows="3"
+                            placeholder="Ingrese la descripcion del producto"></input>
                     </div>
 
                     <div class="mb-3"> <!-- VALOR -->
                         <label for="exampleFormControlInput1" class="form-label">Valor</label>
-                        <input class="form-control" id="valor" placeholder="Ingrese el valor del gasto">
+                        <input type="text" class="form-control" id="valor" placeholder="Ingrese el valor del gasto">
                     </div>
 
-                    <div class="d-grid gap-2" id="btnAdd"> <!-- BOTONES -->
-                        <button class="agregar btn btn-success" id="agregar">Agregar</button>
+                    <div class="d-grid gap-2 mt-4" id="btnAdd"> <!-- BOTONES -->
+                        <button type="submit" value="INGRESAR" class="agregar btn btn-success" id="agregar">Agregar</button>
                     </div>
 
                 </form>
+                
             </div>
 
             <div class="col-sm-12 col-md-8 col-lg-8 py-4 col-xl-8 bg-white"> <!-- DESCRIPCION CATEGORIAS -->

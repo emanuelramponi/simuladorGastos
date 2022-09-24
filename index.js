@@ -3,16 +3,17 @@ let arrayCategoria = ["Alimentacion", "Cuentas y Servicios", "Hogar", "Transport
 const selectTag = document.getElementById('lista')
 const descripcionInput = document.getElementById('descripcion')
 const valorInput = document.getElementById('valor')
-const botonAgregar = document.getElementById('agregar')
 const divCategorias = document.getElementsByClassName('divCategorias')
 const container2 = document.getElementById('btnAdd') 
-const gastosLocal = []
+const gastosLocalstrg = JSON.parse(localStorage.getItem('gastos')) || [] // operadores avanzados, si hay algun elemento dentro del local storage que se guarde sino que quede vacio el array
 
 
 class Categorias { // CREAMOS UN OBJETO CON UN ID Y CATEGORIA PARA CADA UNA DE LAS MISMAS
     constructor(id, categoria,descripcion,valor) {
         this.id = id
         this.categoria = categoria
+        this.descripcion = descripcion
+        this.valor = valor
     }
 
     desplegarProductos() { // ponemos el codigo html para cada categoria 
@@ -56,19 +57,12 @@ opcionesCategorias.forEach(opcionesCategorias => { // AGREGAMOS LAS OPCIONES DEL
 
 const containerDivBtn = document.createElement('p')
 
-const informacionArray = [] 
-if(localStorage.length > 0){
-    const gasto = localStorage.getItem('gasto')
-    const new_conversion = JSON.parse(gasto)
-   for (let i = 0; i < localStorage.length; i++) {      
-        gastosLocal.push(new_conversion)
-    
-   }
-}
+ 
 
-
-botonAgregar.onclick = (e) => {
+const formulario = document.getElementById('form_gastos')
+formulario.onsubmit = (e) => {
     e.preventDefault()
+    let condicionNull = 0
     let gasto = {
         id : parseInt(selectTag.selectedIndex + 1),
         categoria: selectTag.value,
@@ -77,11 +71,24 @@ botonAgregar.onclick = (e) => {
     }
 
     const {id,categoria,descripcion,valor} = gasto
+/*     const object = {}
+    obj['descripcion'] =  */
+/*    
+    } */
+
+
+     Array.from(e.target.children).forEach(children =>{
+        /* input === null || condicionNull++ */
+        Array.from(children.children).forEach(input =>{
+            console.log(input.value);
+        })
+        
+     })
     
-   
-    if(valor >= 0){
-        informacionArray.push(gasto)
-        localStorage.setItem('gastos', JSON.stringify(informacionArray))
+    console.log(e);
+    if(condicionNull>0){
+        gastosLocalstrg.push(new Categorias(id,categoria,descripcion,valor))
+        localStorage.setItem('gastos', JSON.stringify(gastosLocalstrg))
 /*      */   
     }else{
         containerDivBtn.innerText = "Ingreso algun dato invalido"
@@ -89,15 +96,15 @@ botonAgregar.onclick = (e) => {
     }
 }
 
-agregarGastos(localStorage.getItem(`gastos`))
+/* agregarGastos(localStorage.getItem(`gastos`))
+ */
 
 
 
-
-function agregarGastos(gasto){
+/* function agregarGastos(gasto){
         
         containerDivBtn.remove()
-        /* console.log(gasto); */
+        console.log(gasto);
         const new_conversion = JSON.parse(gasto)
         gastosLocal.push(new_conversion)
         console.log(new_conversion);
@@ -118,4 +125,4 @@ function agregarGastos(gasto){
         container2.append(containerDivBtn)
     }    
 
- 
+  */
