@@ -1,6 +1,7 @@
+//  EMANUEL RAMPONI
 let opcionesCategorias = []                                                 // CREO UN ARRAY PARA ALMACENAR LOS OBJETOS DE LAS OPCIONES                                                        
 let arrayCategoria = [
-    "Alimentacion",                                       // CATEGORIAS PREDEFINIDAS
+    "Alimentacion",                                                         // CATEGORIAS PREDEFINIDAS
     "Cuentas y Servicios", 
     "Hogar", 
     "Transporte", 
@@ -13,10 +14,10 @@ const descripcionInput = document.getElementById('descripcion')
 const valorInput = document.getElementById('valor')
 const divCategorias = document.getElementsByClassName('divCategorias')
 const container2 = document.getElementById('btnAdd') 
-const gastosLocal = JSON.parse(localStorage.getItem('gastos')) || []    // OPERADORES AVANZADOS, SI HAY ALGUN ELEMENTO DENTRO DEL LOCAL STORAGE, HACEMOS QUE SE GUARDE, SINO QUE QUEDE VACIO EL ARRAY
+const formulario = document.getElementById('form_gastos')     
+const gastosLocal = JSON.parse(localStorage.getItem('gastos')) || []        // OPERADORES AVANZADOS, SI HAY ALGUN ELEMENTO DENTRO DEL LOCAL STORAGE, HACEMOS QUE SE GUARDE, SINO QUE QUEDE VACIO EL ARRAY
 
-
-console.log(gastosLocal);
+const containerDivBtn = document.createElement('p')
 
 class Categorias {                                                          // CREAMOS UN OBJETO CON UN ID Y CATEGORIA PARA CADA UNA DE LAS MISMAS
     constructor(id, categoria,descripcion,valor) {
@@ -34,8 +35,11 @@ class Categorias {                                                          // C
                 ${this.categoria}
                 </button>
             </h2>
+
             <div id="flush-collapse${this.id}" class="accordion-collapse collapse" aria-labelledby="flush-heading${this.id}" data-bs-parent="#accordionFlushExample">
             <div id="categoria${this.id}" class="accordion-body">
+            <div class="addGastos btn-group d-flex justify-content-between" role="group" aria-label="Basic checkbox toggle button group " id= ${this.id}$">   
+            </div>
             </div>
             </div>
         </div>
@@ -55,8 +59,7 @@ opcionesCategorias.forEach(e => {                                           // D
 }) 
 
 
-
-//==========================================================EVENTOS====================================================================================
+//==========================================================================//EVENTOS====================================================================================
 
 opcionesCategorias.forEach(opcionesCategorias => {                          // AGREGAMOS LAS OPCIONES DEL ARRAY AL DOM
     const option = document.createElement('option')
@@ -64,12 +67,9 @@ opcionesCategorias.forEach(opcionesCategorias => {                          // A
     selectTag.append(option)
 })
 
-const containerDivBtn = document.createElement('p')
+agregarGastos(gastosLocal)                                                  // ANTES DE AGREGAR LOS GASTOS DEL SUBMIT, AGREGO LOS GASTOS YA EXISTENTES DEL LOCAL STORAGE
 
- 
-
-const formulario = document.getElementById('form_gastos')
-formulario.onsubmit = (e) => {
+formulario.onsubmit = (e) => {                                              // AGREGO LOS NUEVOS GASTOS AL HACER SUBMIT
     e.preventDefault()
     let gasto = {
         id : parseInt(selectTag.selectedIndex + 1),
@@ -81,21 +81,22 @@ formulario.onsubmit = (e) => {
     const {id,categoria,descripcion,valor} = gasto
 
 
-    if(valorNotNull(descripcion,valor)){
-        containerDivBtn.innerText = "Ingreso algun dato invalido"
+    if(valorNotNull(descripcion,valor)){                                    // EN CASO DE QUE EL VALORNOTNULL SEA VERDADERO, SIGNIFICA QUE INGRESO O UN VALOR DE STRING VACIO, 
+        containerDivBtn.innerText = "Ingreso algun dato invalido"           // O QUE EL NUMERO ES NEGATIVO, IGUAL A 0, O INGRESO UN STRING EN EL INPUT DE VALOR
         container2.append(containerDivBtn)
-/*      */   
+  
     }else{
-        gastosLocal.push(gasto)
-        localStorage.setItem('gastos', JSON.stringify(gastosLocal))
-        agregarGastos(gastosLocal)
+        gastosLocal.push(gasto)                                             // AGREGO LOS DATOS DEL GASTO PRIMERO AL ARRAY GASTOS LOCAL
+        localStorage.setItem('gastos', JSON.stringify(gastosLocal))         // Y DESPUES LO AGREGO AL LOCAL STORAGE PASANDO COMO PARAMETRO EL ARRAY DEL GASTO
+
+        agregarGastos(gastosLocal)                                          // AGREGO EL GASTO AL DOM
 
     }      
     formulario.reset()
 }
 
-
-function valorNotNull(descripcion,valor){
+                                                                            //VERIFICO SI INGRESO ALGUN DATO NULL O SI EL VALOR ES POSITIVO PARA, 
+function valorNotNull(descripcion,valor){                                   //EN CASO DE QUE SE CUMPLA LA CONDICON, AGREGARLO AL ARRAY
 
     let invalidNumber = valor || true  // si valor es null o vacio o igual a 0, arroja true
     let invalidString = descripcion || true // idem arriba
@@ -108,50 +109,32 @@ function valorNotNull(descripcion,valor){
     */
 }
 
-
 function agregarGastos(array){
-    containerDivBtn.remove()
+    containerDivBtn.remove()                                                // ELIMINO EL CARTEL DE 'DATO INVALIDO'
     
-    opcionesCategorias.forEach(elemento=>{
-        let container = document.getElementById(`categoria${elemento.id}`)
+    opcionesCategorias.forEach(e=>{                                         // PARA CADA CATEGORIA INICIALIZO UN INNERHTML VACIO 
+        let container = document.getElementById(`categoria${e.id}`)
         container.innerHTML =""
     })
+    
+    array.forEach((e,i)=>{
 
-    array.forEach(elemento=>{
-        let div = document.createElement("div")
-        div.innerHTML = `   <div class="addGastos btn-group d-flex justify-content-between" role="group" aria-label="Basic checkbox toggle button group">
-                                <input type="checkbox" class="btn-check" id="btnCheck${elemento.id}" autocomplete="off">
-                                <label class="btn btn-outline-primary d-flex justify-content-between" for="btnCheck${elemento.id}">
-                                <div class="descripcionaccordion" >${elemento.descripcion}</div>
-                                <div class="valoraccordion">${elemento.valor}</div>  
-                                </label>
-                            </div>`
-        let container = document.getElementById(`categoria${elemento.id}`)
-        console.log(container)
-        container.appendChild(div)
+        const {id,descripcion,valor} = e                                    // DESTRUCTURACION DEL ELEMENTO
+    
+        let div = document.createElement("div")                             // CREACION DE UN DIV
+
+        div.innerHTML =                                                     // MODIFICO EL DIV QUE CREE ANTERIORMENTE CON CODIGO
+            `   
+            <input type="checkbox" class="btn-check" id="btnCheck${id}${i+1}" autocomplete="off">
+            <label class="btn btn-outline-primary d-flex justify-content-between" for="btnCheck${id}${i+1}">
+                <div class="descripcionaccordion" >${descripcion}</div> 
+                <div class="valoraccordion"> ${valor}</div>  
+            </label>
+            `
+        let container = document.getElementById(`categoria${id}`)           // COPIAMOS DEL HTML EL DIV CON EL ID DE CATEGORIAS CON SU ID CORRESPONDIENTE, 
+                                                                            // PARA ASIGNAR CADA GASTO EN SU CORRECTO LUGAR
+        container.appendChild(div)                                          // Y POR ULTIMO AGREGAMOS EL  DIV QUE AL CONTAINER QUE RECUPERAMOS ANTES DEL HTML
     })
-
-
 }
-/*         containerDivBtn.remove()
-        console.log(gasto);
-        const new_conversion = JSON.parse(gasto)
-        gastosLocal.push(new_conversion)
-        console.log(new_conversion);
-        const {id,categoria,descripcion,valor} = new_conversion
-        const card = `
-        <div class="addGastos btn-group d-flex justify-content-between" role="group" aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" id="btnCheck${id}" autocomplete="off">
-        <label class="btn btn-outline-primary d-flex justify-content-between" for="btnCheck${id}">
-        <div class="descripcionaccordion" >${descripcion}</div>
-        <div class="valoraccordion">${valor}</div>  
-        </label>
-        </div>
-        `
-        const container2 = document.getElementById(`categoria${id}`)
-        container2.innerHTML += card
-
-        containerDivBtn.innerText = "Gasto agregado"
-        container2.append(containerDivBtn) */
        
-
+// EMANUEL RAMPONI
