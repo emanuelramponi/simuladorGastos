@@ -71,6 +71,8 @@ agregarGastos(gastosLocal)                                                  // A
 
 formulario.onsubmit = (e) => {                                              // AGREGO LOS NUEVOS GASTOS AL HACER SUBMIT
     e.preventDefault()
+
+
     let gasto = {
         id : parseInt(selectTag.selectedIndex + 1),
         categoria: selectTag.value,
@@ -81,18 +83,55 @@ formulario.onsubmit = (e) => {                                              // A
     const {id,categoria,descripcion,valor} = gasto
 
 
+
     if(valorNotNull(descripcion,valor)){                                    // EN CASO DE QUE EL VALORNOTNULL SEA VERDADERO, SIGNIFICA QUE INGRESO O UN VALOR DE STRING VACIO, 
-        containerDivBtn.innerText = "Ingreso algun dato invalido"           // O QUE EL NUMERO ES NEGATIVO, IGUAL A 0, O INGRESO UN STRING EN EL INPUT DE VALOR
-        container2.append(containerDivBtn)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ingreso algun dato incorrecto!',
+          })                                                    
+
   
     }else{
-        gastosLocal.push(gasto)                                             // AGREGO LOS DATOS DEL GASTO PRIMERO AL ARRAY GASTOS LOCAL
-        localStorage.setItem('gastos', JSON.stringify(gastosLocal))         // Y DESPUES LO AGREGO AL LOCAL STORAGE PASANDO COMO PARAMETRO EL ARRAY DEL GASTO
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-success',
+              cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+          })
+        swalWithBootstrapButtons.fire({
+            title: 'Estas seguro/a?',
+            text: "Confirme si quiere agregar o cancelar el gasto introducido",
+            icon: 'warning',
+            showCancelButton: true, 
+            confirmButtonText: 'Si, agregar',
+            cancelButtonText: 'No, cancelar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'Aregado!',
+                'Su gasto ha sido agregado',
+                'success'
+              )
+              gastosLocal.push(gasto)                                             // AGREGO LOS DATOS DEL GASTO PRIMERO AL ARRAY GASTOS LOCAL
+              localStorage.setItem('gastos', JSON.stringify(gastosLocal))         // Y DESPUES LO AGREGO AL LOCAL STORAGE PASANDO COMO PARAMETRO EL ARRAY DEL GASTO
+              agregarGastos(gastosLocal)                                          // AGREGO EL GASTO AL DOM
+        
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              swalWithBootstrapButtons.fire(
+                'Cancelado!',
+                'Su gasto no ha sido agregado',
+                'error'
+              )
+            }
+          })
+    }
+}
 
-        agregarGastos(gastosLocal)                                          // AGREGO EL GASTO AL DOM
+function confirmarGasto(valorNotNull){
 
-    }      
-    formulario.reset()
+
 }
 
                                                                             //VERIFICO SI INGRESO ALGUN DATO NULL O SI EL VALOR ES POSITIVO PARA, 
@@ -138,3 +177,6 @@ function agregarGastos(array){
 }
        
 // EMANUEL RAMPONI
+
+
+  
